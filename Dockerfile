@@ -12,10 +12,12 @@ COPY --chown=1001:root . .
 # Install dependencies
 RUN npm install
 
+RUN npm build
+
 # Expose the port the app runs on
 EXPOSE 8080
 
 RUN npm install -g serve
 
 # Command to run the application
-CMD ["serve", "-s", "dist"]
+CMD ["serve", "-s", "dist", "-p", "8080"]

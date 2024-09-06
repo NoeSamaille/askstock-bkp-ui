@@ -1,29 +1,36 @@
-# Use the official Red Hat Universal Base Image for Node.js
-FROM registry.access.redhat.com/ubi9/nodejs-20:latest
+# Stage 1: Build the application
+FROM registry.access.redhat.com/ubi8/nodejs-20:1 AS build
 
 USER 1001
 
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy application code
+COPY --chown=1001:root . .
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
-COPY . .
-
 # Build the application
 RUN npm run build
 
-# Expose the port the app runs on
-EXPOSE 3000
+# Stage 2: Serve the application
+FROM registry.access.redhat.com/ubi8/nodejs-20-minimal:1
 
-# Use a lightweight server to serve the built application
-# You can use any server you prefer, here we use `serve`
+USER 1001
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the built application from the build stage
+COPY --from=build --chown=1001:root /app/dist ./dist
+
+# Install serve package to serve the static files
 RUN npm install -g serve
 
+# Expose the port the app runs on
+EXPOSE 8080
+
 # Command to run the application
-CMD ["serve", "-s", "dist"]
+CMD ["serve", "-s", "dist", '-p', '8080']

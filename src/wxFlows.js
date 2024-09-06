@@ -9,7 +9,7 @@ export async function getAnswer(question) {
     const schema = await model.generate()
 
     // Make sure these match your values in `wxflows.toml`
-    const flowName = 'myRagWithGuardrails'
+    const flowName = 'myRag'
     const collection = 'stock-analysis'
 
     const result = await model.ragAnswer({

@@ -12,7 +12,7 @@ COPY --chown=1001:root . .
 # Install dependencies
 RUN npm install
 
-RUN npm build
+RUN npm run build
 
 # Expose the port the app runs on
 EXPOSE 8080

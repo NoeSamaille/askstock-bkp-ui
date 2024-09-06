@@ -1,6 +1,8 @@
 # Use the official Red Hat Universal Base Image for Node.js
 FROM registry.access.redhat.com/ubi9/nodejs-20:latest
 
+USER 1001
+
 # Set the working directory
 WORKDIR /app
 
